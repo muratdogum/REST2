@@ -1,18 +1,20 @@
 
 package com.rest.test;
 
+import java.sql.SQLException;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
 
 
 public class RestClient {
 
-    public static void main(String[] args)  {
-       
+    public static void main(String[] args) throws SQLException, ClassNotFoundException  {
+    
       
     }
 

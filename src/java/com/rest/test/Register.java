@@ -18,32 +18,28 @@ public class Register {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     public Response postValueMethod(
-            @QueryParam("tc") int tc,
-            @QueryParam("vkn") int vkn,
+            @QueryParam("tc") String tc,
+            @QueryParam("vkn") String vkn,
             @QueryParam("email") String  email,
             @QueryParam("password") String password) throws ClassNotFoundException{
                 Connectors conn=new Connectors();
                 String  message=conn.Connector2(vkn, tc, email, password);
-                Users users = new Users() ;
-                users.setEmail(email);
-                users.setPassword(password);
-                users.setTc(tc);
-                users.setVkn(vkn);
+                
                 StatusCode statusCode =new StatusCode();
-                if(message.equals("200")){
+                if(message.equals("201")){
                     return Response
             .status(Response.Status.CREATED)
             .type(MediaType.APPLICATION_JSON)
-            .entity(statusCode.Success(users))
+            .entity(statusCode.Created("KAYIT BAŞARILI",201))
             .build();
                 }
                 else{
-                String Eror=message;
+                String Eror="HATA OLUŞTU";
                 int Code=404;
                 return Response
                 .status(Response.Status.NOT_FOUND)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(statusCode.Eror(Eror, Code))
+                .entity(statusCode.Eror(message, Code))
                 .build();
                 }
         

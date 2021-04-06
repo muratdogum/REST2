@@ -2,8 +2,8 @@
 package com.rest.test;
 
 public class Users {
-    private int tc;
-    private int vkn;
+    private String tc;
+    private String vkn;
     private String email;
     private String password;
 
@@ -17,7 +17,7 @@ public class Users {
                 '}';
     }
 
-    public Users(int tc, int vkn, String email, String password) {
+    public Users(String tc, String vkn, String email, String password) {
         this.tc = tc;
         this.vkn = vkn;
         this.email = email;
@@ -28,19 +28,19 @@ public class Users {
     }
 
    
-    public int getTc() {
+    public String getTc() {
         return tc;
     }
 
-    public void setTc(int tc) {
+    public void setTc(String tc) {
         this.tc = tc;
     }
 
-    public int getVkn() {
+    public String getVkn() {
         return vkn;
     }
 
-    public void setVkn(int vkn) {
+    public void setVkn(String vkn) {
         this.vkn = vkn;
     }
 

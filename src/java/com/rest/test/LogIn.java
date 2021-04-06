@@ -20,32 +20,35 @@ public class LogIn {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getValueMethod(
     @QueryParam("email") String  email,
-    @QueryParam("password") String password,
-    @QueryParam("id") int id) throws SQLException, ClassNotFoundException {
-        ArrayList list = new ArrayList();
-        Users users = new Users() ;
-         String  mess = "";
-         StatusCode statusCode =new StatusCode();
+    @QueryParam("password") String password) throws SQLException, ClassNotFoundException {
+        String  mess = "";
+        int id;
+        StatusCode statusCode =new StatusCode();
         try {
+            ArrayList list = new ArrayList();
+        Users users = new Users() ;
+         
+         
        Connectors conn=new Connectors();
        
-        list=conn.Connector(id);
+         list=conn.Connector(email);
          users.setEmail((String) list.get(1));
         users.setPassword((String) list.get(2));
-        users.setTc((int) list.get(3));
-        users.setVkn((int) list.get(4));
-          if(users.getEmail().equals(email)&&users.getPassword().equals(password)){
+        users.setTc((String) list.get(3));
+        users.setVkn((String) list.get(4));
+       id=  (int) list.get(0);
+          if(users.getPassword().equals(password)){
     
           
        return Response
-            .status(Response.Status.ACCEPTED)
+            .status(Response.Status.OK)
             .type(MediaType.APPLICATION_JSON)
-            .entity(statusCode.Success(users))
+            .entity(statusCode.Success(users,id))
             .build();
 
         }
       else{
-          mess="ŞİFRE YADA EMAİL HATALI";
+          mess="ŞİFRE HATALI";
           return Response
                 .status(Response.Status.FORBIDDEN)
                 .type(MediaType.APPLICATION_JSON)
@@ -53,12 +56,12 @@ public class LogIn {
                 .build();
         
       }
-        } catch (ClassNotFoundException throttles) {
-           mess=throttles.getMessage();
+        } catch (Exception throttles) {
+           mess="KULLANICI BULUNAMADI";
             return Response
                 .status(Response.Status.NOT_FOUND)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(statusCode.Eror(mess, 404))
+                .entity(statusCode.Eror(throttles.getMessage(), 404))
                 .build();
       
             }

@@ -12,18 +12,18 @@ import java.util.ArrayList;
 public class Connectors {
 
 
-    public ArrayList Connector(int id) throws ClassNotFoundException {
+    public ArrayList Connector(String email) throws ClassNotFoundException {
        
         ArrayList list = new ArrayList();
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         String url="jdbc:mysql://localhost:3306/vt";
         String user="root";
         String pass="1234m";
         int idusers;
         String email2;
-        int users_tc;
+        String users_tc_vkn;
         String users_pass;
-        int vkn;
+        
 
 
 
@@ -32,25 +32,30 @@ public class Connectors {
         {
             try {
                 connection = DriverManager.getConnection(url,user,pass);
-                String A="SELECT * FROM users WHERE idusers="+id;
+                String A="SELECT * FROM user WHERE email='"+email+"'";
 
                 Statement s = connection.createStatement();
                 ResultSet resultSet;
                 resultSet = s.executeQuery(A);
                  while (resultSet.next()){
-                     idusers=resultSet.getInt("idusers");
-                     email2=resultSet.getString("users_email");
-                     users_tc=resultSet.getInt("users_tc");
-                     users_pass=resultSet.getString("users_password");
-                     vkn=resultSet.getInt("users_vkn");
+                     idusers=resultSet.getInt("id");
+                     email2=resultSet.getString("email");
+                     users_tc_vkn=resultSet.getString("tc-vkn");
+                     users_pass=resultSet.getString("password");
+                     
                    
                   
                     list.add(idusers);
                     list.add(email2);
                     list.add(users_pass);
-                    list.add(users_tc);
-                    list.add(vkn);
-
+                    if(users_tc_vkn.length()==11){
+                    list.add(users_tc_vkn);
+                    list.add("yok");
+}
+                    else{
+                    list.add("yok");
+                    list.add(users_tc_vkn);
+                    }
                 }
                 connection.close();
             } catch (SQLException throttles) {
@@ -59,31 +64,34 @@ public class Connectors {
 
         return list;
         }
-    public String Connector2(int vkn,int tc,String email, String password) throws ClassNotFoundException {
+    public String Connector2(String vkn,String tc,String email, String password) throws ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
         String url="jdbc:mysql://localhost:3306/vt";
         String user="root";
         String pass="1234m";
-       int tcId=tc+1;
+       
 
         Connection connection;
 
         {
             try {
                 connection = DriverManager.getConnection(url,user,pass);
-                String A="INSERT INTO users (`idusers`, `users_tc`, `users_vkn`, `users_email`, `users_password`, `userscol`) VALUES (?,?,?,?,?,?)";
+                String A="INSERT INTO user ( `tc-vkn`, `email`, `password`, `date`) VALUES (?,?,?,Now())";
 
                 PreparedStatement s = connection.prepareStatement(A);
-                s.setInt(1,tcId);
-                s.setInt(2,tc);
-                s.setInt(3,vkn);
-                s.setString(4,email);
-                s.setString(5,password);
-                s.setString(6,password);
+                
+                if(!"".equals(tc)){
+                    s.setString(1,tc);
+                }
+                else{
+                     s.setString(1,vkn);
+                }
+                s.setString(2,email);
+                s.setString(3,password);
                 s.executeUpdate();
                 
                 connection.close();
-                return "200";
+                return "201";
                 
             } catch (SQLException throwables) {
                 
